@@ -1,8 +1,9 @@
 {
-  "name": "tiny-msgpack",
-  "version": "1.0.2",
-  "description": "A minimalistic MessagePack encoder and decoder for JavaScript.",
+  "name": "msgpack-typed-numbers",
+  "version": "0.0.0",
+  "description": "A minimalistic MessagePack encoder and decoder for JavaScript. Supports typed numbers.",
   "main": "lib/index.js",
+  "types": "lib/tiny-msgpack.d.ts",
   "browser": "browser.js",
   "scripts": {
     "test": "$(npm bin)/mocha",
@@ -10,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/JoshuaWise/tiny-msgpack.git"
+    "url": "https://github.com/mattbishop/tiny-msgpack.git"
   },
   "keywords": [
     "binary",
@@ -19,20 +20,29 @@
     "messagepack",
     "serialize",
     "encode",
-    "decode"
+    "decode",
+    "long",
+    "float",
+    "double"
   ],
   "author": "Joshua Wise <joshuathomaswise@gmail.com>",
+  "contributors": [
+    "Matt Bishop <matt@thebishops.org>"
+  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/JoshuaWise/tiny-msgpack/issues"
+    "url": "https://github.com/mattbishop/tiny-msgpack/issues"
   },
-  "homepage": "https://github.com/JoshuaWise/tiny-msgpack#readme",
+  "homepage": "https://github.com/mattbishop/tiny-msgpack#readme",
   "devDependencies": {
     "benchmark": "^2.1.2",
-    "chai": "^3.5.0",
+    "chai": "^4.2.0",
     "cli-color": "^1.1.0",
-    "mocha": "^3.1.2",
+    "mocha": "^5.2.0",
     "msgpack": "^1.0.2",
     "msgpack-lite": "^0.1.26"
+  },
+  "dependencies": {
+    "long": "^4.0.0"
   }
 }

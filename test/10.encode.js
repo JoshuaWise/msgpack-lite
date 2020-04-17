@@ -1,8 +1,10 @@
 'use strict';
 var encode = require('../.').encode;
+var Float = require('./..').Float;
 var referenceEncode = require('msgpack-lite').encode;
 var referenceDecode = require('msgpack-lite').decode;
 var util = require('util');
+var Long = require('long');
 var expect = require('chai').expect;
 
 function expectCorrectLength(value, expectedBytes) {
@@ -105,6 +107,21 @@ describe('msgpack.encode()', function () {
 		expectToEqualReference(stringOf(256), 259);
 		expectToEqualReference(stringOf(65535), 65538);
 		expectToEqualReference(stringOf(65536), 65541);
+	});
+	specify('float', function () {
+		expectCorrectLength(new Float(1.0), 5);
+		expectCorrectLength(new Float(1.01), 9);
+	});
+	specify('long', function () {
+		expectCorrectLength(Long.fromNumber(0), 1);
+		expectCorrectLength(Long.fromNumber(32768), 3);
+		expectCorrectLength(Long.fromNumber(-32768), 3);
+		expectCorrectLength(Long.fromNumber(0x7fffffff), 5);
+		expectCorrectLength(Long.fromNumber(-0x80000000), 5);
+		expectCorrectLength(Long.fromNumber(Number.MIN_SAFE_INTEGER), 9);
+		expectCorrectLength(Long.fromNumber(Number.MAX_SAFE_INTEGER), 9);
+		expectCorrectLength(Long.fromBits(-1, 0x7fffffff), 9);
+		expectCorrectLength(Long.fromBits(0, -0x80000000), 9);
 	});
 	specify('binary', function () {
 		function expectToEqualReferenceBinary(value, expectedBytes) {

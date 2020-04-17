@@ -1,8 +1,10 @@
 'use strict';
 var encode = require('../.').encode;
 var decode = require('../.').decode;
+var Float = require('../.').Float;
 var referenceDecode = require('msgpack-lite').decode;
 var util = require('util');
+var Long = require('long');
 var expect = require('chai').expect;
 
 function expectToDecodeLikeReference(value) {
@@ -14,6 +16,11 @@ function expectToDecodeExactly(value) {
 	var encoded = encode(value);
 	expect(decode(encoded)).to.deep.equal(value);
 	expect(decode(encoded)).to.deep.equal(referenceDecode(Buffer.from(encoded)));
+}
+
+function expectToDecodeExactlyWithoutReference(value) {
+	var encoded = encode(value);
+	expect(decode(encoded)).to.deep.equal(value);
 }
 
 function stringOf(length) {
@@ -93,6 +100,23 @@ describe('msgpack.decode()', function () {
 		expectToDecodeExactly(stringOf(256));
 		expectToDecodeExactly(stringOf(65535));
 		expectToDecodeExactly(stringOf(65536));
+	});
+	specify('float', function () {
+		var expectDecodeForFloat = function (value) {
+			var float = new Float(value);
+			var encoded = encode(float);
+			expect(decode(encoded)).to.equal(float.value);
+		};
+		// 32-bit
+		expectDecodeForFloat(1.0);
+		// 64-bit
+		expectDecodeForFloat(-1.1);
+	});
+	specify('long', function () {
+		expectToDecodeExactlyWithoutReference(Long.fromNumber(Number.MIN_SAFE_INTEGER));
+		expectToDecodeExactlyWithoutReference(Long.fromNumber(Number.MAX_SAFE_INTEGER, true));
+		expectToDecodeExactlyWithoutReference(Long.fromBits(0, -0x80000000));
+		expectToDecodeExactlyWithoutReference(Long.fromBits(-1, 0x7fffffff, true));
 	});
 	specify('binary', function () {
 		function expectToDecodeExactBinary(value) {
